@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namaz Precision Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-glow: #00d2ff;
+            --secondary-glow: #3a86ff;
+            --bg-deep: #0a0f1a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(58, 134, 255, 0.15) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 210, 255, 0.15) 0, transparent 50%);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 440px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #00d2ff, #3a86ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        /* لنکس کے لیے اسٹائل */
+        .correction-links {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .correction-links a {
+            color: var(--primary-glow);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--primary-glow);
+            padding-bottom: 2px;
+        }
+        .correction-links a:hover {
+            color: #fff;
+            border-bottom-style: solid;
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding-left: 4px;
+        }
+
+        input, select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.1);
+        }
+
+        .btn-gps {
+            width: 100%;
+            background: linear-gradient(135deg, #d4af37, #b4942b);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        button.calc-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            color: white;
+            font-size: 0.9rem;
+            transition: transform 0.1s;
+        }
+
+        .btn-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+        .output-panel {
+            margin-top: 30px;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .time-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .time-card .val {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            color: var(--primary-glow);
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--glass-border);
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <h1>Precision Timing</h1>
+    
+    <div class="gps-btn-container">
+        <button onclick="getGPSLocation()" class="btn-gps">
+            <i class="fas fa-location-arrow"></i> GET MY LOCATION
+        </button>
+    </div>
+
+    <div class="correction-links">
+        <a href="https://www.gps-coordinates.net/" target="_blank"><i class="fas fa-map-marker-alt"></i> Find Lat/Lng</a>
+        <a href="https://whataltitude.com/" target="_blank"><i class="fas fa-mountain"></i> Find Altitude</a>
+    </div>
+
+    <div class="form-section">
+        <div class="row">
+            <div class="col" style="flex: 0 0 65px;">
+                <label>Day</label>
+                <select id="day"></select>
+            </div>
+            <div class="col">
+                <label>Month</label>
+                <select id="month">
+                    <option value="1">January</option><option value="2">February</option>
+                    <option value="3">March</option><option value="4">April</option>
+                    <option value="5">May</option><option value="6">June</option>
+                    <option value="7">July</option><option value="8">August</option>
+                    <option value="9">September</option><option value="10">October</option>
+                    <option value="11">November</option><option value="12">December</option>
+                </select>
+            </div>
+            <div class="col" style="flex: 0 0 95px;">
+                <label>Year</label>
+                <select id="year"></select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label>UTC Offset</label>
+                <input type="number" id="stTime" step="0.5">
+            </div>
+            <div class="col">
+                <label>Elev (ft)</label>
+                <input type="number" id="elev" placeholder="Auto">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label>Latitude</label>
+                <input type="number" id="lat" step="0.00001" placeholder="28.17943">
+            </div>
+            <div class="col">
+                <label>Longitude</label>
+                <input type="number" id="lng" step="0.00001" placeholder="68.04454">
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="calc-btn btn-green" onclick="calculate('Hanafi')">HANAFI</button>
+            <button class="calc-btn btn-blue" onclick="calculate('Shafi')">SHAFI'I</button>
+        </div>
+    </div>
+
+    <div id="resultsArea" class="output-panel">
+        <div class="time-card"><span class="label">Fajar (108°)</span><span class="val" id="res-fajar"></span></div>
+        <div class="time-card"><span class="label">Sunrise</span><span class="val" id="res-sunrise"></span></div>
+        <div class="time-card highlight"><span class="label">Duhwa e Kubra</span><span class="val" id="res-kubra"></span></div>
+        <div class="time-card"><span class="label">Zuhar</span><span class="val" id="res-zuhar"></span></div>
+        <div class="time-card"><span class="label">Asar</span><span class="val" id="res-asar"></span></div>
+        <div class="time-card"><span class="label">Maghrib</span><span class="val" id="res-maghrib"></span></div>
+        <div class="time-card"><span class="label">Isha</span><span class="val" id="res-isha"></span></div>
+    </div>
+
+    <div class="footer">
+        Made by Awais-ud-din Bangulzai<br>
+        <span style="font-size: 0.65rem; opacity: 0.6;">Iterative Solar Calculation Engine v2.0</span>
+    </div>
+</div>
+
+<script>
+    // --- پیج لوڈ ہونے پر ڈیٹا بحال کرنا اور ٹائم زون سیٹ کرنا ---
+    window.onload = function() {
+        // 1. خودکار ٹائم زون معلوم کرنا
+        const autoOffset = -(new Date().getTimezoneOffset() / 60);
+        document.getElementById('stTime').value = autoOffset;
+
+        // 2. محفوظ شدہ ڈیٹا لوڈ کرنا (اگر موجود ہو)
+        if(localStorage.getItem('userLat')) {
+            document.getElementById('lat').value = localStorage.getItem('userLat');
+            document.getElementById('lng').value = localStorage.getItem('userLng');
+            document.getElementById('elev').value = localStorage.getItem('userElev');
+        } else {
+            // ڈیفالٹ ویلیوز اگر پہلے کبھی سیو نہیں کیا
+            document.getElementById('lat').value = "28.17943";
+            document.getElementById('lng').value = "68.04454";
+            document.getElementById('elev').value = "190";
+        }
+    }
+
+    function getGPSLocation() {
+        if (navigator.geolocation) {
+            const btn = document.querySelector('.btn-gps');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const latitude = position.coords.latitude.toFixed(5);
+                const longitude = position.coords.longitude.toFixed(5);
+                const altitudeMeters = position.coords.altitude || 0;
+                const altitudeFeet = Math.round(altitudeMeters * 3.28084);
+
+                // خانوں میں ڈیٹا ڈالنا
+                document.getElementById('lat').value = latitude;
+                document.getElementById('lng').value = longitude;
+                document.getElementById('elev').value = altitudeFeet;
+
+                // لوکل اسٹوریج میں محفوظ کرنا
+                localStorage.setItem('userLat', latitude);
+                localStorage.setItem('userLng', longitude);
+                localStorage.setItem('userElev', altitudeFeet);
+
+                btn.innerHTML = '<i class="fas fa-check"></i> Location Saved!';
+                setTimeout(() => { btn.innerHTML = '<i class="fas fa-location-arrow"></i> GET MY LOCATION'; }, 2000);
+                
+                alert("Location updated and saved for future use!");
+
+            }, function(error) {
+                btn.innerHTML = '<i class="fas fa-location-arrow"></i> GET MY LOCATION';
+                alert("GPS Error: " + error.message);
+            }, { enableHighAccuracy: true });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    // --- باقی اصل کیلکولیشن فنکشنز (بغیر کسی تبدیلی کے) ---
+    const D2R = Math.PI / 180, R2D = 180 / Math.PI;
+
+    const dSel = document.getElementById('day'), mSel = document.getElementById('month'), ySel = document.getElementById('year');
+    const now = new Date();
+    for(let i=1; i<=31; i++) dSel.options.add(new Option(i, i));
+    for(let i=1900; i<=2100; i++) ySel.options.add(new Option(i, i));
+    dSel.value = now.getDate(); mSel.value = now.getMonth() + 1; ySel.value = now.getFullYear();
+
+    function getSolarData(jd) {
+        const T = (jd - 2451545) / 36525;
+        const L0 = (280.46645 + 36000.76983 * T + 0.0003032 * Math.pow(T, 2)) % 360;
+        const M = (357.5291 + 35999.0503 * T - 0.0001559 * Math.pow(T, 2)) % 360;
+        const Omega = (125.04 - 1934.136 * T) % 360;
+        const C = (1.914602 - 0.004817 * T - 0.000014 * Math.pow(T, 2)) * Math.sin(M * D2R) +
+                  (0.019993 - 0.000101 * T) * Math.sin(2 * M * D2R) +
+                  0.000289 * Math.sin(3 * M * D2R);
+        const trueLong = (L0 + C) % 360;
+        const appLong = trueLong - 0.00569 - 0.00478 * Math.sin(Omega * D2R);
+        const eps = 23.439291 - 0.0130042 * T - 0.00000016 * Math.pow(T, 2) + 0.00256 * Math.cos(Omega * D2R);
+        const decl = Math.asin(Math.sin(appLong * D2R) * Math.sin(eps * D2R)) * R2D;
+        const alphaRad = Math.atan2(Math.cos(eps * D2R) * Math.sin(appLong * D2R), Math.cos(appLong * D2R));
+        const alphaDeg = (alphaRad * R2D + 360) % 360;
+        const meanRA = (L0 - 0.005718 + 0.00188 + 360) % 360;
+        let eotDiff = (meanRA - alphaDeg + 180) % 360 - 180;
+        const EOT = (eotDiff * 4) / 60;
+        const e = 0.016708634 - 0.000042037 * T;
+        const SD = (0.2666 / (1 - e * Math.cos(M * D2R)));
+        const HP = 8.794 / (3600 * (1 - e * Math.cos(M * D2R)));
+        return { EOT, decl, SD, HP };
+    }
+
+    function calculate(madhab) {
+        const Lat = parseFloat(document.getElementById('lat').value);
+        const Long = parseFloat(document.getElementById('lng').value);
+        const ST = parseFloat(document.getElementById('stTime').value);
+        const elev = parseFloat(document.getElementById('elev').value);
+        const Y = parseInt(ySel.value), M = parseInt(mSel.value), D = parseInt(dSel.value);
+
+        const JD = 367 * Y - Math.floor(7 * (Y + Math.floor((M + 9) / 12)) / 4) + Math.floor(275 * M / 9) + D + 1721013.5;
+
+        const getHA = (ang, d, l) => {
+            let cosHA = (Math.cos(ang * D2R) - Math.sin(l * D2R) * Math.sin(d * D2R)) / (Math.cos(l * D2R) * Math.cos(d * D2R));
+            return (cosHA > 1 || cosHA < -1) ? null : Math.acos(cosHA) * R2D / 15;
+        };
+
+        const solar0h = getSolarData(JD);
+
+        let tFaj = 12 + ST - Long/15 - solar0h.EOT - getHA(108, solar0h.decl, Lat);
+        for(let i=0; i<2; i++) {
+            let s = getSolarData(JD + (tFaj - ST)/24);
+            tFaj = 12 + ST - Long/15 - s.EOT - getHA(108, s.decl, Lat);
+        }
+
+        const sunriseAngle = 90 + (34/60 + 9/3600) + solar0h.SD - solar0h.HP + (58.2/3600 * Math.sqrt(elev));
+        let tSr = 12 + ST - Long/15 - solar0h.EOT - getHA(sunriseAngle, solar0h.decl, Lat);
+        for(let i=0; i<2; i++) {
+            let s = getSolarData(JD + (tSr - ST)/24);
+            tSr = 12 + ST - Long/15 - s.EOT - getHA(sunriseAngle, s.decl, Lat);
+        }
+
+        let tZuh = 12 + ST - Long/15 - solar0h.EOT;
+        let sZuhFinal;
+        for(let i=0; i<2; i++) {
+            sZuhFinal = getSolarData(JD + (tZuh - ST)/24);
+            tZuh = 12 + ST - Long/15 - sZuhFinal.EOT;
+        }
+
+        const asrF = (madhab === 'Hanafi') ? 2 : 1;
+        const ZA_hz = Math.abs(Lat - sZuhFinal.decl) - sZuhFinal.SD;
+        const R_hm = 0.017 * Math.tan((ZA_hz - 10.3 / (95.11 - ZA_hz)) * D2R);
+        const ZA_hmz = ZA_hz - R_hm;
+        const ZA_hma = Math.atan(Math.tan(ZA_hmz * D2R) + asrF) * R2D;
+        const R_mh = 0.0167 * Math.tan((ZA_hma - 7.31 / (94.4 - ZA_hma)) * D2R);
+        const ZA_asar = ZA_hma + R_mh + sZuhFinal.SD;
+
+        let tAsr = 12 + ST - Long/15 - sZuhFinal.EOT + getHA(ZA_asar, sZuhFinal.decl, Lat);
+        for(let i=0; i<2; i++) {
+            let s = getSolarData(JD + (tAsr - ST)/24);
+            tAsr = 12 + ST - Long/15 - s.EOT + getHA(ZA_asar, s.decl, Lat);
+        }
+
+        let tMag = 12 + ST - Long/15 - solar0h.EOT + getHA(sunriseAngle, solar0h.decl, Lat);
+        for(let i=0; i<2; i++) {
+            let s = getSolarData(JD + (tMag - ST)/24);
+            tMag = 12 + ST - Long/15 - s.EOT + getHA(sunriseAngle, s.decl, Lat);
+        }
+
+        const iAng = (madhab === 'Hanafi') ? 108 : 102;
+        let tIsh = 12 + ST - Long/15 - solar0h.EOT + getHA(iAng, solar0h.decl, Lat);
+        for(let i=0; i<2; i++) {
+            let s = getSolarData(JD + (tIsh - ST)/24);
+            tIsh = 12 + ST - Long/15 - s.EOT + getHA(iAng, s.decl, Lat);
+        }
+
+        const fmt = (t, subSec = 1) => {
+            if (t === null || isNaN(t)) return "--:--:--";
+            let totalSeconds = Math.round(t * 3600) - subSec;
+            let h = Math.floor(totalSeconds / 3600);
+            let m = Math.floor((totalSeconds % 3600) / 60);
+            let s = totalSeconds % 60;
+            const displayH = (h % 12 || 12);
+            const ampm = h % 24 >= 12 ? 'PM' : 'AM';
+            return `${displayH}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} ${ampm}`;
+        };
+
+        document.getElementById('resultsArea').style.display = 'block';
+        document.getElementById('res-fajar').innerText = fmt(tFaj);
+        document.getElementById('res-sunrise').innerText = fmt(tSr);
+        document.getElementById('res-kubra').innerText = fmt(tFaj + (tMag - tFaj)/2);
+        document.getElementById('res-zuhar').innerText = fmt(tZuh);
+        document.getElementById('res-asar').innerText = fmt(tAsr, 4);
+        document.getElementById('res-maghrib').innerText = fmt(tMag);
+        document.getElementById('res-isha').innerText = fmt(tIsh);
+    }
+</script>
+</body>
+</html>
